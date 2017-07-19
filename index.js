@@ -184,6 +184,7 @@ $(document).ready(function () {
   }
 
  var touchStartHandler = function (e){
+    e.preventDefault();
     var d = new Date();
     ttime = d.getTime();
     proccessTouchEnd = true;
