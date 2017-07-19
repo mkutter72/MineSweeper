@@ -1,0 +1,31 @@
+.boardImage {
+  height:  600px;
+  max-width: 600px;
+  margin : 30px auto;
+  position: relative;
+  top :20px;
+  left :-50px;*/
+}
+
+
+.newrow{
+clear : left;
+}
+
+
+.square {
+  height: 50px;
+  width: 50px;
+  float : left;
+  font-size: 40px;
+  font-style: bold;
+  color: midnightblue;
+  text-align: center;
+  vertical-align: middle;
+  border : 2px black solid;
+  margin : 2px;
+  border-radius: 5px;
+}
+
+
+
