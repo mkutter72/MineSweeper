@@ -112,6 +112,10 @@ function checkForWin()
 }
 
 $(document).ready(function () {
+ var ttime;
+ var mtime;
+ var touchcnt=0;
+ var proccessTouchEnd = false;
 
  var liClickHandler = function liClick(event) {
     var idStr = event.target.id;
@@ -158,19 +162,10 @@ $(document).ready(function () {
   };
 
 
-  var mtime;
   var mouseDownHandler = function (){
     var d = new Date();
     mtime = d.getTime();
     console.log("mouseDownHandler "+touchcnt++);
-  }
-
- var ttime;
- var touchcnt=0;
- var touchStartHandler = function (e){
-    var d = new Date();
-    ttime = d.getTime();
-    console.log("touchStartHandler "+touchcnt++);
   }
 
  var mouseUpHandler = function (e){
@@ -188,20 +183,36 @@ $(document).ready(function () {
     }
   }
 
+ var touchStartHandler = function (e){
+    var d = new Date();
+    ttime = d.getTime();
+    proccessTouchEnd = true;
+    console.log("touchStartHandler "+touchcnt++);
+  }
+
+ var touchMoveHandler = function (e){
+    proccessTouchEnd = false;
+    console.log("touchMoveHandler ");
+  }
+
+
  var touchEndHandler = function (e){
     e.preventDefault();
 
     var d = new Date();
     console.log("touchEndHandler "+touchcnt++);
 
-    if (d.getTime()-ttime < 300)
-      liClickHandler(e);
-    else
-      handleMineClick(e);
+    if (proccessTouchEnd) {
+      proccessTouchEnd = false;
+      if (d.getTime()-ttime < 300)
+        liClickHandler(e);
+      else
+        handleMineClick(e);
 
-    if (checkForWin()) {
-      alert("Congratulations!  You won the game");
-      turnOffEvents();
+      if (checkForWin()) {
+        alert("Congratulations!  You won the game");
+        turnOffEvents();
+      }
     }
   }
 
@@ -220,7 +231,9 @@ $(document).ready(function () {
     $('.square').on('mouseup',mouseUpHandler);
     document.getElementById('boardList').ontouchstart = function (e) {touchStartHandler(e)};
     document.getElementById('boardList').ontouchend = function (e) {touchEndHandler(e)};
+    document.getElementById('boardList').ontouchmove = function (e) {touchMoveHandler(e)};
     }
+
 
 
   var turnOffEvents = function () {
@@ -228,6 +241,7 @@ $(document).ready(function () {
     $('.square').off('mouseup',mouseUpHandler);
     document.getElementById('boardList').removeEventListener("ontouchstart", touchStartHandler);
     document.getElementById('boardList').removeEventListener("ontouchend", touchStartHandler);
+    document.getElementById('boardList').removeEventListener("ontouchmove", touchMoveHandler);
   }
 
   var showBoard = function () {
