@@ -25,6 +25,9 @@ clear : left;
   border : 2px black solid;
   margin : 2px;
   border-radius: 5px;
+
+    background-size: 55px 55px;
+
 }
 
 

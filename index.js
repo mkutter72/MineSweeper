@@ -28,21 +28,42 @@ function countNearByMines(rindex, cindex) {
   return cnt;
 }
 
+function showAllMines(){
+  for (var r=0; r<gridSize; r++)
+    for (var c=0; c<gridSize; c++)
+      if (board[r][c] === 'M') {
+            var jqStr = '#C'+r+c;
+            $(jqStr).css("background-image", "url(Mine.png)");
+      }
+}
+
 
 function setBoard(row,col,value){
     var jqStr = '#C'+row+col;
+    var colors = ['blue', 'green', 'red', 'orange', 'purple','yellow', 'blue', 'green'];
+
+    if (playTracker[row][col]===true && value!=="")
+      return;
 
     if (value === '-')
        $(jqStr).css("background-color", "#ccebff");
      else
-      $(jqStr).text(value);
+      if (value!=='X')
+        $(jqStr).text(value);
 
     if (value === "") {
       playTracker[row][col] = false;
       $(jqStr).css("background-color", "white");
+      $(jqStr).css('background-image', 'none');
     }
     else
       playTracker[row][col] = true;
+
+    if (value==="X") 
+      $(jqStr).css("background-image", "url(Flag.png)");
+    else 
+      $(jqStr).css("color", colors[value-1]);
+
 }
 
 function displayBoard() {
@@ -127,6 +148,7 @@ $(document).ready(function () {
       if (board[row][col] === 'M') {
         setBoard(row,col,'M');
         alert("Game Over, you exploded a mine!! Click NewGame to Play again");
+        showAllMines();
         turnOffEvents();
       } else if (board[row][col] !== 0)
         setBoard(row,col,board[row][col]);
@@ -146,7 +168,7 @@ $(document).ready(function () {
 
       var jqStr = '#C'+row+col;
 
-      if($(jqStr).text() === 'X') {
+      if(playTracker[row][col] === true) {
         setBoard(row,col,"");
         --mineCount;
         console.log(mineCount);
@@ -155,7 +177,7 @@ $(document).ready(function () {
         if ($(jqStr).text() === "")  {
           setBoard(row,col,"X");
           ++mineCount;
-             console.log(mineCount);
+          console.log(mineCount);
         }
       }
     }
@@ -179,6 +201,7 @@ $(document).ready(function () {
 
     if (checkForWin()) {
       alert("Congratulations!  You won the game");
+      showAllMines();
       turnOffEvents();
     }
   }
@@ -211,6 +234,7 @@ $(document).ready(function () {
 
       if (checkForWin()) {
         alert("Congratulations!  You won the game");
+        showAllMines();
         turnOffEvents();
       }
     }
