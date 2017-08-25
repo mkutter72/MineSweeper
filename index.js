@@ -4,7 +4,7 @@ var gridSize = 9;
 var numMines = 10;
 var board = [];
 var playTracker = [];
-var mineCount = 0;
+
 
 var rowmoves = [0,  -1, -1, -1,  0, +1, +1, +1];
 var colmoves = [-1, -1,  0, +1, +1, +1,  0, -1];
@@ -31,38 +31,45 @@ function countNearByMines(rindex, cindex) {
 function showAllMines(){
   for (var r=0; r<gridSize; r++)
     for (var c=0; c<gridSize; c++)
-      if (board[r][c] === 'M') {
-            var jqStr = '#C'+r+c;
+      if (board[r][c] === "M") {
+            var jqStr = '#C-'+r+"-"+c;
             $(jqStr).css("background-image", "url(Mine.png)");
       }
 }
 
 
+
 function setBoard(row,col,value){
-    var jqStr = '#C'+row+col;
+    var jqStr = '#C-'+row+"-"+col;
     var colors = ['blue', 'green', 'red', 'orange', 'purple','yellow', 'blue', 'green'];
 
-    if (playTracker[row][col]===true && value!=="")
-      return;
+    if (playTracker[row][col] !== null) {
+      if (!(playTracker[row][col] === "Flag" && value==="Clear"))
+        return;
+    } 
 
-    if (value === '-')
-       $(jqStr).css("background-color", "#ccebff");
-     else
-      if (value!=='X')
+    if (isNaN(value)) {
+      if (value === "Flag") {
+        playTracker[row][col] = "Flag";
+         $(jqStr).css("background-image", "url(Flag.png)");
+      } else
+      if (value === "Clear") {
+          playTracker[row][col] = null;
+          $(jqStr).css("background-color", "white");
+          $(jqStr).css('background-image', 'none');
+          $(jqStr).text("");
+      }
+    } else {
+      playTracker[row][col] = value;
+      if (value === 0)
+        $(jqStr).css("background-color", "#ccebff");
+      else {
+        $(jqStr).css("color", colors[value-1]);
         $(jqStr).text(value);
-
-    if (value === "") {
-      playTracker[row][col] = false;
-      $(jqStr).css("background-color", "white");
-      $(jqStr).css('background-image', 'none');
+      }
     }
-    else
-      playTracker[row][col] = true;
+     
 
-    if (value==="X") 
-      $(jqStr).css("background-image", "url(Flag.png)");
-    else 
-      $(jqStr).css("color", colors[value-1]);
 
 }
 
@@ -76,13 +83,13 @@ function displayBoard() {
 function clearBoard() {
   for (var r=0; r<gridSize; r++)
     for (var c=0; c<gridSize; c++)
-        setBoard(r,c,"");
+        setBoard(r,c,"Clear");
 }
 
 function createScreenBoard(boardId){
     for (var row = 0; row < gridSize; row++) {
     for (var col = 0; col < gridSize; col++) {
-      var outstr = "<div id=\"C" + row + col;
+      var outstr = "<div id=\"C-" + row  + "-" + col;
       if (col === 0 && row !== 0)
         outstr += "\" class = \"square newrow\"></div>";
       else
@@ -105,7 +112,7 @@ function revealAnyFilled(rindex,cindex){
 }
 
 function markEmptyAndLookForMore(row,col) {
-    setBoard(row,col,"-");
+    setBoard(row,col,0);
     for (var x=0; x<8; x++) {
       var nrindex = row + rowmoves[x];
       var ncindex = col + colmoves[x];
@@ -121,10 +128,14 @@ function markEmptyAndLookForMore(row,col) {
 
 function checkForWin()
 {
+  var mineCount = 0;
   for (var z=0; z<gridSize; z++)
     for (var y=0; y<gridSize; y++)
-      if (playTracker[z][y] === false)
+      if (playTracker[z][y] === null)
         return false;
+      else
+        if (playTracker[z][y] === "Flag")
+          ++mineCount;
 
   if (mineCount === numMines)
      return true;
@@ -142,10 +153,10 @@ $(document).ready(function () {
     var idStr = event.target.id;
 
     if (idStr[0] === 'C') {
-      var row = parseInt(idStr[1]);
-      var col = parseInt(idStr[2]);
+      var row = parseInt(idStr.split("-")[1]);
+      var col = parseInt(idStr.split("-")[2]);
 
-      if (board[row][col] === 'M') {
+      if (board[row][col] === 'M' && playTracker[row][col] === null) {
         setBoard(row,col,'M');
         alert("Game Over, you exploded a mine!! Click NewGame to Play again");
         showAllMines();
@@ -163,21 +174,17 @@ $(document).ready(function () {
     var idStr = event.target.id;
 
     if (idStr[0] === 'C') {
-      var row = parseInt(idStr[1]);
-      var col = parseInt(idStr[2]);
+      var row = parseInt(idStr.split("-")[1]);
+      var col = parseInt(idStr.split("-")[2]);
 
       var jqStr = '#C'+row+col;
 
-      if(playTracker[row][col] === true) {
-        setBoard(row,col,"");
-        --mineCount;
-        console.log(mineCount);
+      if(playTracker[row][col] === "Flag") {
+        setBoard(row,col,"Clear");
       }
       else {
-        if ($(jqStr).text() === "")  {
-          setBoard(row,col,"X");
-          ++mineCount;
-          console.log(mineCount);
+        if (playTracker[row][col] === null)  {
+          setBoard(row,col,"Flag");
         }
       }
     }
@@ -187,11 +194,11 @@ $(document).ready(function () {
   var mouseDownHandler = function (){
     var d = new Date();
     mtime = d.getTime();
-    console.log("mouseDownHandler "+touchcnt++);
+    //console.log("mouseDownHandler "+touchcnt++);
   }
 
  var mouseUpHandler = function (e){
-    console.log("mouseUpHandler"+touchcnt++);
+  //  console.log("mouseUpHandler"+touchcnt++);
     var d = new Date();
 
     if (d.getTime()-mtime < 300)
@@ -210,12 +217,12 @@ $(document).ready(function () {
     var d = new Date();
     ttime = d.getTime();
     proccessTouchEnd = true;
-    console.log("touchStartHandler "+touchcnt++);
+  //  console.log("touchStartHandler "+touchcnt++);
   }
 
  var touchMoveHandler = function (e){
     proccessTouchEnd = false;
-    console.log("touchMoveHandler ");
+   // console.log("touchMoveHandler ");
   }
 
 
@@ -241,10 +248,8 @@ $(document).ready(function () {
   }
 
   $("#newGame").on('click', function (e){
-    console.log("Got here");
-    clearBoard();
     newGame();
-
+    clearBoard();
   });
 
 
@@ -291,13 +296,13 @@ $(document).ready(function () {
 
  for (var cnt=0; cnt < gridSize; cnt++) {
     board[cnt] = new Array(gridSize).fill(null);
-    playTracker[cnt] =new Array(gridSize).fill(false);
+    playTracker[cnt] =new Array(gridSize).fill(null);
  }
 
   var newGame = function () {
     for (var cnt=0; cnt < gridSize; cnt++) {
       board[cnt].fill(null);
-      playTracker[cnt].fill(false);
+      playTracker[cnt].fill(null);
     }
 
   setMines();
@@ -311,7 +316,6 @@ $(document).ready(function () {
     showBoard(board);
     turnOffEvents();
     turnOnEvents();
-    mineCount=0;
   }
 
 
