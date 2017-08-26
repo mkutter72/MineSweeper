@@ -345,6 +345,47 @@ span.onclick = function() {
 }
 
 
+
+var ddbody = document.getElementById("dropDownText");
+
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+
+ $("#selection1").on('click', function (e){
+    ddbody.innerHTML = " 9 x 9";
+  });
+
+  $("#selection2").on('click', function (e){
+    ddbody.innerHTML = " 10 x 10";
+  });
+
+   $("#selection3").on('click', function (e){
+    ddbody.innerHTML = " 11 x 11";
+  });
+
+ $("#dropDownText").on('click', function (e){
+    document.getElementById("myDropdown").classList.toggle("show");
+  });
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+
+
+
+
+
 });
 
 
