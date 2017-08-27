@@ -1,10 +1,21 @@
+
+html {
+  background: url("underwater.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+
+
 .boardImage {
   height:  700px;
   max-width: 700px;
   margin : 30px auto;
   position: relative;
   top :20px;
-  left :-50px;*/
+  left :-50px;
 }
 
 
@@ -26,6 +37,7 @@ clear : left;
   margin : 2px;
   border-radius: 5px;
   background-size: 55px 55px;
+  background-color: white;
 }
 
 
