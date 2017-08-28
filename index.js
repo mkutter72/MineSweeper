@@ -87,6 +87,7 @@ function clearBoard() {
 }
 
 function createScreenBoard(boardId){
+    $(boardId).html("");
     for (var row = 0; row < gridSize; row++) {
     for (var col = 0; col < gridSize; col++) {
       var outstr = "<div id=\"C-" + row  + "-" + col;
@@ -253,7 +254,6 @@ $(document).ready(function () {
 
   $("#newGame").on('click', function (e){
     newGame();
-    clearBoard();
   });
 
 
@@ -309,7 +309,8 @@ $(document).ready(function () {
       playTracker[cnt].fill(null);
     }
 
-  setMines();
+   clearBoard();
+    setMines();
 
 
     for (var r=0; r<gridSize; r++)
@@ -317,9 +318,9 @@ $(document).ready(function () {
         if (board[r][c] === null)
          board[r][c] = countNearByMines(r,c);
 
-    showBoard(board);
-    turnOffEvents();
-    turnOnEvents();
+      showBoard(board);
+      turnOffEvents();
+      turnOnEvents();
   }
 
 
@@ -356,11 +357,20 @@ toggle between hiding and showing the dropdown content */
   });
 
   $("#selection2").on('click', function (e){
-    ddbody.innerHTML = " 10 x 10";
+    ddbody.innerHTML = " 16 x 16";
+    gridSize = 16;
+    numMines = 35;
+     for (var cnt=0; cnt < gridSize; cnt++) {
+      board[cnt] = new Array(gridSize).fill(null);
+      playTracker[cnt] =new Array(gridSize).fill(null);
+      }
+
+    createScreenBoard("#boardList");
+    newGame();
   });
 
    $("#selection3").on('click', function (e){
-    ddbody.innerHTML = " 11 x 11";
+    ddbody.innerHTML = " 30 x 16";
   });
 
  $("#dropDownText").on('click', function (e){
