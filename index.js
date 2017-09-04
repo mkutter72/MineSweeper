@@ -1,6 +1,7 @@
 'use strict';
 
-var gridSize = 9;
+var gridSizeRow = 9;
+var gridSizeCol = 7;
 var numMines = 10;
 var board = [];
 var playTracker = [];
@@ -20,7 +21,7 @@ function countNearByMines(rindex, cindex) {
   for (var x=0; x<8; x++) {
     var nrindex = rindex + rowmoves[x];
     var ncindex = cindex + colmoves[x];
-    if (nrindex >= 0 && nrindex < gridSize && ncindex >= 0 && ncindex < gridSize) {
+    if (nrindex >= 0 && nrindex < gridSizeRow && ncindex >= 0 && ncindex < gridSizeCol) {
       if (board[nrindex][ncindex] === "M")
         ++cnt;
     }
@@ -29,8 +30,8 @@ function countNearByMines(rindex, cindex) {
 }
 
 function showAllMines(){
-  for (var r=0; r<gridSize; r++)
-    for (var c=0; c<gridSize; c++)
+  for (var r=0; r<gridSizeRow; r++)
+    for (var c=0; c<gridSizeCol; c++)
       if (board[r][c] === "M") {
             var jqStr = '#C-'+r+"-"+c;
             $(jqStr).css("background-image", "url(Mine.png)");
@@ -74,22 +75,22 @@ function setBoard(row,col,value){
 }
 
 function displayBoard() {
-  for (var r=0; r<gridSize; r++)
-    for (var c=0; c<gridSize; c++)
+  for (var r=0; r<gridSizeRow; r++)
+    for (var c=0; c<gridSizeCol; c++)
       if (board[r][c] !== 0)
         setBoard(r,c,board[r][c]);
 }
 
 function clearBoard() {
-  for (var r=0; r<gridSize; r++)
-    for (var c=0; c<gridSize; c++)
+  for (var r=0; r<gridSizeRow; r++)
+    for (var c=0; c<gridSizeCol; c++)
         setBoard(r,c,"Clear");
 }
 
 function createScreenBoard(boardId){
     $(boardId).html("");
-    for (var row = 0; row < gridSize; row++) {
-    for (var col = 0; col < gridSize; col++) {
+    for (var row = 0; row < gridSizeRow; row++) {
+    for (var col = 0; col < gridSizeCol; col++) {
       var outstr = "<div id=\"C-" + row  + "-" + col;
       if (col === 0 && row !== 0)
         outstr += "\" class = \"square newrow\"></div>";
@@ -105,7 +106,7 @@ function revealAnyFilled(rindex,cindex){
   for (var x=0; x<8; x++) {
     var nrindex = rindex + rowmoves[x];
     var ncindex = cindex + colmoves[x];
-    if (nrindex >= 0 && nrindex < gridSize && ncindex >= 0 && ncindex < gridSize) {
+    if (nrindex >= 0 && nrindex < gridSizeRow && ncindex >= 0 && ncindex < gridSizeCol) {
       if (board[nrindex][ncindex] !== 0)
         setBoard(nrindex,ncindex,board[nrindex][ncindex]);
     }
@@ -117,7 +118,7 @@ function markEmptyAndLookForMore(row,col) {
     for (var x=0; x<8; x++) {
       var nrindex = row + rowmoves[x];
       var ncindex = col + colmoves[x];
-      if (nrindex >= 0 && nrindex < gridSize && ncindex >= 0 && ncindex < gridSize) {
+      if (nrindex >= 0 && nrindex < gridSizeRow && ncindex >= 0 && ncindex < gridSizeCol) {
         if (board[nrindex][ncindex] === 0) {
           board[nrindex][ncindex] = "-";
           revealAnyFilled(nrindex,ncindex)
@@ -130,8 +131,8 @@ function markEmptyAndLookForMore(row,col) {
 function checkForWin()
 {
   var mineCount = 0;
-  for (var z=0; z<gridSize; z++)
-    for (var y=0; y<gridSize; y++)
+  for (var z=0; z<gridSizeRow; z++)
+    for (var y=0; y<gridSizeCol; y++)
       if (playTracker[z][y] === null)
         return false;
       else
@@ -278,15 +279,15 @@ $(document).ready(function () {
   }
 
   var showBoard = function () {
-    for (var cnt=0; cnt < gridSize; cnt++)
+    for (var cnt=0; cnt < gridSizeRow; cnt++)
       console.log(board[cnt]);
   };
 
   var setMines = function () {
     var cnt = numMines;
     while (cnt > 0) {
-      var row = getRandomIntInclusive(0, gridSize-1);
-      var col = getRandomIntInclusive(0, gridSize-1);
+      var row = getRandomIntInclusive(0, gridSizeRow-1);
+      var col = getRandomIntInclusive(0, gridSizeCol-1);
       if (board[row][col] !== "M") {
         board[row][col] = "M";
         cnt--;
@@ -298,13 +299,13 @@ $(document).ready(function () {
   createScreenBoard("#boardList");
 
 
- for (var cnt=0; cnt < gridSize; cnt++) {
-    board[cnt] = new Array(gridSize).fill(null);
-    playTracker[cnt] =new Array(gridSize).fill(null);
+ for (var cnt=0; cnt < gridSizeRow; cnt++) {
+    board[cnt] = new Array(gridSizeCol).fill(null);
+    playTracker[cnt] =new Array(gridSizeCol).fill(null);
  }
 
   var newGame = function () {
-    for (var cnt=0; cnt < gridSize; cnt++) {
+    for (var cnt=0; cnt < gridSizeRow; cnt++) {
       board[cnt].fill(null);
       playTracker[cnt].fill(null);
     }
@@ -313,8 +314,8 @@ $(document).ready(function () {
     setMines();
 
 
-    for (var r=0; r<gridSize; r++)
-      for (var c=0; c<gridSize; c++)
+    for (var r=0; r<gridSizeRow; r++)
+      for (var c=0; c<gridSizeCol; c++)
         if (board[r][c] === null)
          board[r][c] = countNearByMines(r,c);
 
@@ -345,7 +346,15 @@ span.onclick = function() {
     modal.style.display = "none";
 }
 
+ var createNewBoardSize = function () {
+    for (var cnt=0; cnt < gridSizeRow; cnt++) {
+      board[cnt] = new Array(gridSizeCol).fill(null);
+      playTracker[cnt] =new Array(gridSizeCol).fill(null);
+      }
 
+    createScreenBoard("#boardList");
+    newGame();
+  };
 
 var ddbody = document.getElementById("dropDownText");
 
@@ -354,23 +363,24 @@ toggle between hiding and showing the dropdown content */
 
  $("#selection1").on('click', function (e){
     ddbody.innerHTML = " 9 x 9";
+    gridSizeRow = gridSizeCol = 9;
+    numMines = 10;
+    createNewBoardSize();
   });
 
   $("#selection2").on('click', function (e){
     ddbody.innerHTML = " 16 x 16";
-    gridSize = 16;
+    gridSizeRow = gridSizeCol = 16;
     numMines = 35;
-     for (var cnt=0; cnt < gridSize; cnt++) {
-      board[cnt] = new Array(gridSize).fill(null);
-      playTracker[cnt] =new Array(gridSize).fill(null);
-      }
-
-    createScreenBoard("#boardList");
-    newGame();
+    createNewBoardSize();
   });
 
    $("#selection3").on('click', function (e){
     ddbody.innerHTML = " 30 x 16";
+    gridSizeRow =  30;
+    gridSizeCol = 16;
+    numMines = 99;
+    createNewBoardSize();
   });
 
  $("#dropDownText").on('click', function (e){
