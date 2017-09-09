@@ -1,8 +1,8 @@
 'use strict';
 
-var gridSizeRow = 9;
-var gridSizeCol = 7;
-var numMines = 10;
+var gridSizeRow = 6;
+var gridSizeCol = 6;
+var numMines = 6;
 var board = [];
 var playTracker = [];
 
@@ -131,14 +131,19 @@ function markEmptyAndLookForMore(row,col) {
 function checkForWin()
 {
   var mineCount = 0;
+  var allSpacesFilled = true;
+  var modal = document.getElementById('mineCount');
   for (var z=0; z<gridSizeRow; z++)
     for (var y=0; y<gridSizeCol; y++)
-      if (playTracker[z][y] === null)
+      if (playTracker[z][y] === null) {
+        modal.innerHTML = numMines-mineCount;
         return false;
+      }
       else
         if (playTracker[z][y] === "Flag")
           ++mineCount;
 
+  modal.innerHTML = numMines-mineCount;
   if (mineCount === numMines)
      return true;
   else
@@ -150,6 +155,8 @@ $(document).ready(function () {
  var mtime;
  var touchcnt=0;
  var proccessTouchEnd = false;
+ var modal = document.getElementById('mineCount');
+ modal.innerHTML = numMines;
 
  var liClickHandler = function liClick(event) {
     var idStr = event.target.id;

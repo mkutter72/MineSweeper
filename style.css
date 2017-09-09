@@ -8,6 +8,11 @@ html {
 }
 
 
+#topBanner {
+  height: 100px;
+  width: 700px;
+  background-color: grey;
+}
 
 .boardImage {
   height:  700px;
@@ -20,9 +25,29 @@ html {
 
 
 .newrow{
-clear : left;
+  clear : left;
 }
 
+#mineCount {
+  position: relative;
+  display: inline-block;
+  font-size: 30px;
+  color: white;
+}
+
+
+.bannerSquare{
+  position: relative;
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  vertical-align: middle;
+  border : 2px black solid;
+  margin : 2px;
+  border-radius: 5px;
+  background-size: 55px 55px;
+  background-image: url("Mine.png");
+}
 
 .square {
   height: 50px;
@@ -111,13 +136,14 @@ clear : left;
 
 
 .dropbtn {
+    height: 30px;
+    vertical-align: middle;
     background-color: #4CAF50;
     color: white;
     padding: 16px;
     font-size: 16px;
-     min-width: 100px;
+    min-width: 100px;
     border: none;
-    cursor: pointer;
 }
 
 .dropbtn:hover, .dropbtn:focus {
