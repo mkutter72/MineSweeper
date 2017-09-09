@@ -260,6 +260,7 @@ $(document).ready(function () {
 
   $("#newGame").on('click', function (e){
     newGame();
+    $('#newGame').blur();
   });
 
 

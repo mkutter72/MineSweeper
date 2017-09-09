@@ -9,9 +9,16 @@ html {
 
 
 #topBanner {
-  height: 100px;
-  width: 700px;
-  background-color: grey;
+  height: 80px;
+  width: 100%;
+  background-color: #bfbfbf;
+}
+
+#newGame {
+  height: 50px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
 }
 
 .boardImage {
@@ -33,6 +40,8 @@ html {
   display: inline-block;
   font-size: 30px;
   color: white;
+  top :7px;
+  left : 7px;
 }
 
 
@@ -47,6 +56,7 @@ html {
   border-radius: 5px;
   background-size: 55px 55px;
   background-image: url("Mine.png");
+  left : 10px;
 }
 
 .square {
@@ -136,7 +146,7 @@ html {
 
 
 .dropbtn {
-    height: 30px;
+    height: 50px;
     vertical-align: middle;
     background-color: #4CAF50;
     color: white;
@@ -173,5 +183,6 @@ html {
 }
 
 .dropdown a:hover {background-color: #f1f1f1}
+
 
 .show {display:block;}
