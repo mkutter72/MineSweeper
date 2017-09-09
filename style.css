@@ -9,12 +9,13 @@ html {
 
 
 #topBanner {
-  height: 80px;
+  height: 60px;
   width: 100%;
   background-color: #bfbfbf;
 }
 
 #newGame {
+  position: relative;
   height: 50px;
   background-color: #4CAF50;
   color: white;
