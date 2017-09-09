@@ -3,6 +3,7 @@
 var gridSizeRow = 6;
 var gridSizeCol = 6;
 var numMines = 6;
+var numMinesToFind = 6;
 var board = [];
 var playTracker = [];
 
@@ -132,18 +133,15 @@ function checkForWin()
 {
   var mineCount = 0;
   var allSpacesFilled = true;
-  var modal = document.getElementById('mineCount');
   for (var z=0; z<gridSizeRow; z++)
     for (var y=0; y<gridSizeCol; y++)
       if (playTracker[z][y] === null) {
-        modal.innerHTML = numMines-mineCount;
         return false;
       }
       else
         if (playTracker[z][y] === "Flag")
           ++mineCount;
 
-  modal.innerHTML = numMines-mineCount;
   if (mineCount === numMines)
      return true;
   else
@@ -155,8 +153,6 @@ $(document).ready(function () {
  var mtime;
  var touchcnt=0;
  var proccessTouchEnd = false;
- var modal = document.getElementById('mineCount');
- modal.innerHTML = numMines;
 
  var liClickHandler = function liClick(event) {
     var idStr = event.target.id;
@@ -192,10 +188,12 @@ $(document).ready(function () {
 
       if(playTracker[row][col] === "Flag") {
         setBoard(row,col,"Clear");
+        $("#mineCount").text(++numMinesToFind);
       }
       else {
         if (playTracker[row][col] === null)  {
           setBoard(row,col,"Flag");
+          $("#mineCount").text(--numMinesToFind);
         }
       }
     }
@@ -320,6 +318,9 @@ $(document).ready(function () {
    clearBoard();
     setMines();
 
+    numMinesToFind = numMines;
+    $("#mineCount").text(numMinesToFind);
+
 
     for (var r=0; r<gridSizeRow; r++)
       for (var c=0; c<gridSizeCol; c++)
@@ -359,6 +360,7 @@ span.onclick = function() {
       playTracker[cnt] =new Array(gridSizeCol).fill(null);
       }
 
+    $("#mineCount").text(numMinesToFind);
     createScreenBoard("#boardList");
     newGame();
   };
@@ -371,14 +373,14 @@ toggle between hiding and showing the dropdown content */
  $("#selection1").on('click', function (e){
     ddbody.innerHTML = " 9 x 9";
     gridSizeRow = gridSizeCol = 9;
-    numMines = 10;
+    numMinesToFind = numMines = 10;
     createNewBoardSize();
   });
 
   $("#selection2").on('click', function (e){
     ddbody.innerHTML = " 16 x 16";
     gridSizeRow = gridSizeCol = 16;
-    numMines = 35;
+    numMinesToFind = numMines = 35;
     createNewBoardSize();
   });
 
@@ -386,7 +388,7 @@ toggle between hiding and showing the dropdown content */
     ddbody.innerHTML = " 30 x 16";
     gridSizeRow =  30;
     gridSizeCol = 16;
-    numMines = 99;
+    numMinesToFind = numMines = 99;
     createNewBoardSize();
   });
 
