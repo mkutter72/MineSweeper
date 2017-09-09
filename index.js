@@ -365,27 +365,25 @@ span.onclick = function() {
     newGame();
   };
 
-var ddbody = document.getElementById("dropDownText");
-
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 
  $("#selection1").on('click', function (e){
-    ddbody.innerHTML = " 9 x 9";
+    $("#dropDownText").text("9 x 9");
     gridSizeRow = gridSizeCol = 9;
     numMinesToFind = numMines = 10;
     createNewBoardSize();
   });
 
   $("#selection2").on('click', function (e){
-    ddbody.innerHTML = " 16 x 16";
+    $("#dropDownText").text("16 x 16");
     gridSizeRow = gridSizeCol = 16;
     numMinesToFind = numMines = 35;
     createNewBoardSize();
   });
 
    $("#selection3").on('click', function (e){
-    ddbody.innerHTML = " 30 x 16";
+    $("#dropDownText").text("30 x 16");
     gridSizeRow =  30;
     gridSizeCol = 16;
     numMinesToFind = numMines = 99;
